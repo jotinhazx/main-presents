@@ -174,6 +174,9 @@ function setupHeartTrigger() {
         const clientY = e.clientY || (rect.top + rect.height / 2);
         createHeartBurst(clientX, clientY, 24);
 
+        // Toca a música Delacruz - Me Leva (Acústico) desde 00:00 com a interação do usuário
+        playDelacruzMusic();
+
         // Desvanecer suavemente a tela de introdução
         introScreen.classList.add('hidden');
 
@@ -457,87 +460,65 @@ function setupAmbientCanvas() {
 }
 
 /* -------------------------------------------------------------------
-   7. TRILHA SONORA AMBIENTE SUAVE (SINTETIZADA VIA WEB AUDIO API)
-   Sem arquivos externos pesados ou erros de CORS, som de piano suave
+   7. TRILHA SONORA: DELACRUZ - ME LEVA (ACÚSTICO)
+   Começa a partir de 00:00 com controle de play/pause suave
 ------------------------------------------------------------------- */
-let audioCtx = null;
 let isAudioPlaying = false;
-let melodyInterval = null;
 
 function setupAmbientAudio() {
+    const audio = document.getElementById('bg-music');
     const toggleBtn = document.getElementById('audio-toggle-btn');
     const statusText = document.getElementById('audio-status-text');
 
-    if (!toggleBtn) return;
+    if (!audio || !toggleBtn) return;
+
+    // Configura áudio para tocar em loop e volume suave
+    audio.loop = true;
+    audio.volume = 0.65;
 
     toggleBtn.addEventListener('click', () => {
-        if (!isAudioPlaying) {
-            startGentleMelody();
-            toggleBtn.classList.add('playing');
-            if (statusText) statusText.textContent = 'Pausar melodia';
-            isAudioPlaying = true;
+        if (audio.paused) {
+            playDelacruzMusic();
         } else {
-            stopGentleMelody();
-            toggleBtn.classList.remove('playing');
-            if (statusText) statusText.textContent = 'Melodia suave';
-            isAudioPlaying = false;
+            pauseDelacruzMusic();
         }
+    });
+
+    audio.addEventListener('play', () => {
+        isAudioPlaying = true;
+        toggleBtn.classList.add('playing');
+        if (statusText) statusText.textContent = 'Pausar música';
+    });
+
+    audio.addEventListener('pause', () => {
+        isAudioPlaying = false;
+        toggleBtn.classList.remove('playing');
+        if (statusText) statusText.textContent = 'Delacruz - Me Leva';
     });
 }
 
-function startGentleMelody() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playDelacruzMusic() {
+    const audio = document.getElementById('bg-music');
+    if (!audio) return;
+
+    // Garante que comece exatamente do início: 00:00 se não estiver tocando
+    if (audio.currentTime === 0 || audio.paused) {
+        if (audio.currentTime === 0) {
+            audio.currentTime = 0;
+        }
     }
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
 
-    // Sequência de acordes sutis e tranquilos em pentatônica (G / Em / C / D)
-    const notes = [
-        392.00, 440.00, 493.88, 587.33, 659.25, 783.99, // Sol, Lá, Si, Ré, Mi, Sol
-        523.25, 587.33, 659.25, 783.99, 880.00
-    ];
-
-    let noteIdx = 0;
-    const playNextNote = () => {
-        if (!isAudioPlaying || !audioCtx) return;
-
-        const freq = notes[noteIdx % notes.length];
-        noteIdx = (noteIdx + Math.floor(Math.random() * 2) + 1) % notes.length;
-
-        playPianoTone(freq, 2.6);
-    };
-
-    playNextNote();
-    melodyInterval = setInterval(playNextNote, 1600);
-}
-
-function stopGentleMelody() {
-    if (melodyInterval) {
-        clearInterval(melodyInterval);
-        melodyInterval = null;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+        playPromise.catch((err) => {
+            console.log('Autoplay bloqueado pelo navegador até interação do usuário:', err);
+        });
     }
 }
 
-function playPianoTone(freq, duration = 2.5) {
-    if (!audioCtx) return;
-    const now = audioCtx.currentTime;
-
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(freq, now);
-
-    // Envelope suave de ataque e release longo (efeito etéreo e aconchegante)
-    gain.gain.setValueAtTime(0.001, now);
-    gain.gain.exponentialRampToValueAtTime(0.06, now + 0.12);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + duration);
+function pauseDelacruzMusic() {
+    const audio = document.getElementById('bg-music');
+    if (audio) {
+        audio.pause();
+    }
 }
