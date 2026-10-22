@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Com carinho, Jotinha ❤️</title>
+    <meta name="description" content="Um cantinho especial e delicado preparado especialmente para você. Com carinho, Jotinha.">
+    <meta name="theme-color" content="#090a10">
+
+    <!-- Google Fonts: Playfair Display, Plus Jakarta Sans & Alex Brush -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Folha de Estilos -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Linha de progresso sutil no topo -->
+    <div class="scroll-progress-line" id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- Canvas de partículas e orbes de luz ambiente -->
+    <canvas id="ambient-canvas" aria-hidden="true"></canvas>
+    <div class="ambient-orb orb-1" aria-hidden="true"></div>
+    <div class="ambient-orb orb-2" aria-hidden="true"></div>
+    <div class="ambient-orb orb-3" aria-hidden="true"></div>
+
+    <!-- Barra de Controle de Trilha Sonora Opcional e Delicada -->
+    <button id="audio-toggle-btn" class="audio-control-bar" aria-label="Ligar ou pausar melodia suave ambiente">
+        <svg class="audio-icon" id="audio-icon" viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        <span id="audio-status-text">Melodia suave</span>
+    </button>
+
+    <!-- =========================================================
+         TELA INICIAL: O CORAÇÃO & A SURPRESA
+    ========================================================== -->
+    <section id="screen-intro" aria-label="Surpresa inicial">
+        <div class="intro-content">
+            <button id="heart-trigger-btn" class="heart-button-wrapper" aria-label="Abrir surpresa preparada para você">
+                <div class="heart-pulse-ring"></div>
+                <div class="heart-pulse-ring delayed"></div>
+                
+                <!-- SVG Ícone do Coração Elegante -->
+                <svg class="heart-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff7b89" />
+                            <stop offset="50%" stop-color="#e25563" />
+                            <stop offset="100%" stop-color="#b82d3e" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#heartGradient)"/>
+                </svg>
+            </button>
+
+            <p class="intro-teaser">Preparei uma coisinha especial para você...</p>
+            <div class="intro-cta" id="cta-text">
+                Clique aqui <span>❤️</span>
+            </div>
+            <p class="intro-instruction">Toque no coração para descobrir</p>
+        </div>
+    </section>
+
+    <!-- =========================================================
+         CONTEÚDO PRINCIPAL DA HOMENAGEM
+    ========================================================== -->
+    <main id="main-app" class="hidden">
+        
+        <!-- 1. ABERTURA DA HOMENAGEM -->
+        <section class="section hero-welcome" id="sec-welcome">
+            <div class="welcome-badge">
+                <span>✨</span> Um pequeno presente digital
+            </div>
+            <h1 class="welcome-title" id="welcome-heading">Oi, você! ❤️</h1>
+            
+            <div class="welcome-card reveal-on-scroll" id="welcome-body-card">
+                <!-- Parágrafos inseridos dinamicamente ou estáticos -->
+                <p class="text-justified">
+                    Sei que pode parecer uma surpresa inesperada ver uma página assim, mas achei que seria uma forma diferente e legal de demonstrar minha consideração por você.
+                </p>
+                <p class="text-justified">
+                    Mesmo nos conhecendo há pouco tempo, é muito fácil notar a sua energia leve e a forma bonita como você se expressa. Queria criar esse cantinho com todo respeito para que você saiba o quanto achei especial te conhecer.
+                </p>
+            </div>
+
+            <button class="scroll-indicator-btn" id="scroll-to-gallery-btn" aria-label="Rolar para a galeria">
+                <span>Conheça os detalhes</span>
+                <svg class="scroll-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 10l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </section>
+
+        <!-- 2. GALERIA DE FOTOGRAFIAS (ÁLBUM AFETIVO) -->
+        <section class="section" id="sec-gallery">
+            <div class="section-header reveal-on-scroll">
+                <span class="section-tag">Momentos & Luz</span>
+                <h2 class="section-title">A beleza em cada instante</h2>
+            </div>
+
+            <div class="gallery-grid" id="gallery-container">
+                <!-- Itens da galeria gerados dinamicamente via content.js com fallback estático -->
+            </div>
+        </section>
+
+        <!-- 3. MENSAGENS E ELOGIOS PERSONALIZADOS -->
+        <section class="section" id="sec-elogios">
+            <div class="section-header reveal-on-scroll">
+                <span class="section-tag">Admiração & Carinho</span>
+                <h2 class="section-title">O que faz você ser tão única</h2>
+            </div>
+
+            <div class="messages-grid" id="elogios-container">
+                <!-- Cartões de qualidades gerados dinamicamente via content.js -->
+            </div>
+        </section>
+
+        <!-- 4. FRASE DE PENSADOR FAMOSO -->
+        <section class="section quote-section" id="sec-quote">
+            <div class="quote-wrapper reveal-on-scroll">
+                <div class="quote-decoration-mark">“</div>
+                <blockquote class="quote-text" id="quote-content">
+                    A beleza das coisas existe no espírito de quem as contempla.
+                </blockquote>
+                <p class="quote-author" id="quote-author">David Hume</p>
+                <p class="quote-context" id="quote-context">
+                    Filósofo escocês — sobre como pequenos gestos de atenção revelam a beleza e o carisma de quem cruzamos pelo caminho.
+                </p>
+            </div>
+        </section>
+
+        <!-- 5. MENSAGEM FINAL & ASSINATURA OBRIGATÓRIA -->
+        <section class="section closing-section" id="sec-final">
+            <div class="closing-card reveal-on-scroll">
+                <h2 class="closing-title">Um gesto gentil e sincero</h2>
+                
+                <p class="closing-text">
+                    Espero sinceramente que este pequeno detalhe tenha conseguido arrancar pelo menos um sorriso seu e deixado seu dia mais leve.
+                </p>
+                <p class="closing-text">
+                    Achei que valia a pena tirar um tempinho para criar algo criativo e demonstrar que admiro você e a sua energia bacana.
+                </p>
+                <p class="closing-text">
+                    Foi feito com muito carinho, respeito e admiração por esse começo de convivência.
+                </p>
+
+                <!-- Assinatura Solicitada: Com carinho, Jotinha ❤️ -->
+                <div class="signature-container">
+                    <span class="signature-text">
+                        Com carinho, Jotinha <span class="signature-heart">❤️</span>
+                    </span>
+                </div>
+
+                <!-- Detalhe interativo sutil escondido -->
+                <button class="easter-egg-btn" id="easter-egg-btn" aria-label="Ver lembrete especial">
+                    ✨ Toque aqui para um lembrete secreto
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal de Ampliação de Fotografia (Lightbox) -->
+    <div id="lightbox-modal" role="dialog" aria-modal="true" aria-label="Visualização de foto ampliada">
+        <div class="lightbox-content-box">
+            <button class="lightbox-close-btn" id="lightbox-close" aria-label="Fechar ampliação">&times;</button>
+            <div class="lightbox-image-wrapper">
+                <img id="lightbox-img" src="" alt="">
+            </div>
+            <p class="lightbox-caption-text" id="lightbox-caption"></p>
+        </div>
+    </div>
+
+    <!-- Notificação / Mensagem Secreta Flutuante -->
+    <div id="secret-toast" role="status" aria-live="polite"></div>
+
+    <!-- Botão de Voltar ao Topo -->
+    <button id="back-to-top" aria-label="Voltar ao início">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 15l-6-6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- Scripts da Aplicação -->
+    <script src="content.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
